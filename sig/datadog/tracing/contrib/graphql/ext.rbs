@@ -10,6 +10,7 @@ module Datadog
           ENV_ANALYTICS_SAMPLE_RATE: "DD_TRACE_GRAPHQL_ANALYTICS_SAMPLE_RATE"
 
           ENV_WITH_UNIFIED_TRACER: string
+          ENV_ERROR_EXTENSIONS: string
           EVENT_QUERY_ERROR: String
           SERVICE_NAME: "graphql"
 
