@@ -198,9 +198,6 @@ module Datadog
           def add_query_error_events(span, errors)
             capture_extensions = Datadog.configuration.tracing[:graphql][:error_extensions]
             errors.each do |error|
-              e = Core::Error.build_from(error)
-              err = error.to_h
-
               extensions = if !capture_extensions.empty? && (extensions = error.extensions)
                              # Capture extensions, ensuring all values are primitives
                              extensions.each_with_object({}) do |(key, value), hash|
@@ -220,16 +217,18 @@ module Datadog
                              {}
                            end
 
+              graphql_error = error.to_h
+              error = Core::Error.build_from(error)
+
               span.span_events << Datadog::Tracing::SpanEvent.new(
                 Ext::EVENT_QUERY_ERROR,
-                attributes: {
-                  message: err['message'],
-                  type: e.type,
-                  stacktrace: e.backtrace,
-                  locations: serialize_error_locations(err['locations']),
-                  path: err['path'],
-                  **extensions
-                }
+                attributes: extensions.merge!(
+                  message: graphql_error['message'],
+                  type: error.type,
+                  stacktrace: error.backtrace,
+                  locations: serialize_error_locations(graphql_error['locations']),
+                  path: graphql_error['path'],
+                )
               )
             end
           end
