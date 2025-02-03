@@ -95,7 +95,7 @@ module Datadog
       # to killing the thread using Thread#kill.
       def stop(timeout = 1)
         @stop_requested = true
-        logger.debug("di: stopping probe notifier")
+        logger.debug("di: stopping probe notifier: pid #{$$}")
         wake.signal
         if thread
           unless thread.join(timeout)
