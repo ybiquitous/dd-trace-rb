@@ -312,11 +312,11 @@ namespace :github do
     matrix = eval(File.read('Matrixfile')).freeze # rubocop:disable Security/Eval
 
     exceptions = [
-      # 'sidekiq', # Connection refused - connect(2) for 127.0.0.1:6379 (RedisClient::CannotConnectError)
+      'sidekiq', # Connection refused - connect(2) for 127.0.0.1:6379 (RedisClient::CannotConnectError)
     ]
 
-    # candidates = exceptions
-    candidates = matrix.keys - exceptions
+    candidates = exceptions
+    # candidates = matrix.keys - exceptions
 
     raise 'No candidates.' if candidates.empty?
 
